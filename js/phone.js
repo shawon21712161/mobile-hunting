@@ -1,45 +1,46 @@
-// alternative fetch
-
-// function loadData() {
-    
-//     fetch('https://openapi.programming-hero.com/api/phones?search=iphone')
-//     .then(res => res.json())
-//     .then(data => console.log(data.data))  
-// }
-
-// loadData()
-
-
-// async fetch
-
-const loadData = async () => {
-    const res = await fetch('https://openapi.programming-hero.com/api/phones?search=iphone')
+const loadPhone = async(searchText)=> {
+    const res = await fetch (`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
     const data = await res.json();
-    const phones = data.data; 
-    displayPhones(phones)
-}
-
-const displayPhones = phones =>{
-    const PhoneContainer = document.getElementById('phone-container')
-    phones.forEach(phone => {
-        console.log(phone);
-        const phoneCard = document.createElement('div');
-        phoneCard.classList=`card  bg-gray-100 shadow-xl`;
-        phoneCard.innerHTML=`<figure><img src="${phone.image}" alt="Shoes" /></figure>
-        <div class="card-body">
-          <h2 class="card-title">${phone.phone_name}</h2>
-          <p>If a dog chews shoes whose shoes does he choose?</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary">Buy Now</button>
-          </div>
-        </div>   
-        `
-        PhoneContainer.appendChild(phoneCard);
-    });
+    const phones = data.data;
+    displayPhone(phones);
 }
 
 
 
+const displayPhone =phones=>{
+// console.log(phones);
 
-loadData()
+const phoneContainer = document.getElementById('phone-container')
+// clear phone container cards before addding the new cards.
+phoneContainer.textContent=''
 
+phones.forEach(phone => {
+    console.log(phone); 
+    // 2. create a div 
+    const phoneCard = document.createElement('div');
+    phoneCard.classList =`card p-4 bg-gray-100 shadow-xl`
+    // 3. set a innerHTML
+    phoneCard.innerHTML=`
+    <figure><img src="${phone.image}" alt="Shoes" /></figure>
+                    <div class="card-body">
+                      <h2 class="card-title">${phone.phone_name}</h2>
+                      <p>If a dog chews shoes whose shoes does he choose?</p>
+                      <div class="card-actions justify-end">
+                        <button class="btn btn-primary">Buy Now</button>
+                      </div>
+                    </div>
+    `
+    // 4. append child
+    phoneContainer.appendChild(phoneCard);
+});
+}
+
+
+// handle search button.
+const handleSearch = () =>{
+    const searchField = document.getElementById('search-field')
+    const searchText = searchField.value;
+    console.log(searchText);
+    loadPhone(searchText)
+}
+// loadPhone()
