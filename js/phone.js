@@ -44,7 +44,11 @@ phones.forEach(phone => {
     `
     // 4. append child
     phoneContainer.appendChild(phoneCard);
+   
+    
 });
+// hidden spinner 
+toggleLoadingButton(false);
 }
 
 
@@ -55,11 +59,21 @@ const handleSearch = () =>{
     console.log(searchText);
     loadPhone(searchText)
 }
-
+// handle search button recap.
 const handleSearch2=()=>{
+    toggleLoadingButton(true);
     const searchField = document.getElementById('search-field2');
     const searchText = searchField.value;
     loadPhone(searchText)
 }
 
+const toggleLoadingButton = (isLoading) =>{
+    const loadingSpinner = document.getElementById('loading-spinner');
+    if(isLoading){
+        loadingSpinner.classList.remove('hidden')
+    }
+    else{
+        loadingSpinner.classList.add('hidden')
+    }
+}
 // loadPhone()
