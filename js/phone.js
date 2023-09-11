@@ -1,4 +1,4 @@
-const loadPhone = async(searchText)=> {
+const loadPhone = async(searchText='13')=> {
     const res = await fetch (`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
     const data = await res.json();
     const phones = data.data;
@@ -8,7 +8,7 @@ const loadPhone = async(searchText)=> {
 
 
 const displayPhone =phones=>{
-console.log(phones);
+// console.log(phones);
 
 const phoneContainer = document.getElementById('phone-container')
 // clear phone container cards before addding the new cards.
@@ -37,8 +37,8 @@ phones.forEach(phone => {
                     <div class="card-body">
                       <h2 class="card-title">${phone.phone_name}</h2>
                       <p>If a dog chews shoes whose shoes does he choose?</p>
-                      <div class="card-actions justify-end">
-                        <button class="btn btn-primary">Buy Now</button>
+                      <div class="card-actions justify-center pt-4">
+                        <button onclick = "handlshowbutton('${phone.slug}')" class="btn btn-primary ">Show Details</button>
                       </div>
                     </div>
     `
@@ -52,20 +52,52 @@ toggleLoadingButton(false);
 }
 
 
+// 
+const handlshowbutton = async(id) => {
+    // console.log('clicked show details ',id);
+    // load single phone data
+    const res = await fetch(`https://openapi.programming-hero.com/api/phone/${id}`) 
+    const data = await res.json()
+    const phone = data.data
+    showPhonedetails(phone);
+    
+}
+
+
+const showPhonedetails = (phone)=>{
+    // console.log(phone);
+    const phoneName = document.getElementById('show-detail-phone-name')
+    phoneName.innerText= phone.name;
+    const showDetailContainer = document.getElementById('show-detail-container');
+    showDetailContainer.innerHTML =`
+    <img src="${phone.image}" alt="">
+    <p><span>Release Date : </span>${''}</p>
+    <p><span>Stroge : </span>${phone.mainFeatures.memory}</p>
+
+    <p><span>Display Size : </span>${phone.mainFeatures.displaySize}</p>
+
+    <p><span>ChipSet : </span>${phone.mainFeatures.chipSet}</p>
+
+    <p><span>sensors: </span>${phone.mainFeatures.sensors}</p>
+    ` 
+// show the modal
+show_details_modal_.showModal()
+}
 // handle search button.
 const handleSearch = () =>{
+    toggleLoadingButton(true);
     const searchField = document.getElementById('search-field')
     const searchText = searchField.value;
     console.log(searchText);
     loadPhone(searchText)
 }
 // handle search button recap.
-const handleSearch2=()=>{
-    toggleLoadingButton(true);
-    const searchField = document.getElementById('search-field2');
-    const searchText = searchField.value;
-    loadPhone(searchText)
-}
+// const handleSearch2=()=>{
+    
+//     const searchField = document.getElementById('search-field2');
+//     const searchText = searchField.value;
+//     loadPhone(searchText)
+// }
 
 const toggleLoadingButton = (isLoading) =>{
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -76,4 +108,4 @@ const toggleLoadingButton = (isLoading) =>{
         loadingSpinner.classList.add('hidden')
     }
 }
-// loadPhone()
+loadPhone()
